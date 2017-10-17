@@ -572,7 +572,7 @@ GenXSecAnalyzer::endJob() {
   }
   else if(hepidwtup_ == -1 )
     edm::LogPrint("GenXSecAnalyzer") 
-      << "Before Filtrer: total cross section = " 
+      << "Before Filter: total cross section = " 
       << std::scientific << std::setprecision(3)  
       << xsecPreFilter_.value() << " +- " << xsecPreFilter_.error() <<  " pb";
 
@@ -639,6 +639,14 @@ GenXSecAnalyzer::endJob() {
       // fill negative fraction of negative weights and uncertainty after filter
       final_fract_neg_w = filterOnly_event_pass > 0 ? filterOnlyEffStat_.numPassNegativeEvents()/(filterOnly_event_pass) : 0;
       final_fract_neg_w_unc = filterOnlyEffStat_.numPassNegativeEvents() > 0 ? final_fract_neg_w*final_fract_neg_w/filterOnly_event_pass*sqrt(filterOnlyEffStat_.numPassPositiveEvents()*filterOnlyEffStat_.numPassPositiveEvents()/filterOnlyEffStat_.numPassNegativeEvents()+filterOnlyEffStat_.numPassPositiveEvents()) : 0;
+  
+  // Warning for GEN contacts
+  edm::LogPrint("GenXSecAnalyzer") 
+      << "\n---> THE FILTER EFFICIENCY TO BE USED IN REQUESTS THROUGH MCM IS "
+      <<  std::scientific << std::setprecision(3) 
+      << filterOnly_eff << " +- " << filterOnly_err 
+      << "   Make sure to correctly add this in your request. Please also see https://twiki.cern.ch/twiki/bin/view/CMS/PdmVMcMGenContact#Matching_and_filter_efficiency";
+  
   }
 
   edm::LogPrint("GenXSecAnalyzer") 
